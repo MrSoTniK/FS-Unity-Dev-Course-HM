@@ -28,7 +28,7 @@ namespace ShootEmUp
             if (_damage <= 0)
                 return;
 
-            if (collision.gameObject.TryGetComponent(out Unit unit))
+            if (collision.gameObject.TryGetComponent(out Ship unit))
             {
                 unit.ReceiveDamage(_damage);
                 OnBulletHit?.Invoke(gameObject);

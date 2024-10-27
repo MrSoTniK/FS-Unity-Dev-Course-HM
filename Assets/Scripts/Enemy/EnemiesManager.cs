@@ -11,7 +11,7 @@ namespace ShootEmUp
         private BulletManager _bulletManager;
 
         [SerializeField] 
-        private Unit _target;
+        private Ship _target;
 
         [SerializeField] 
         private Transform _worldTransform;
@@ -29,7 +29,7 @@ namespace ShootEmUp
         {
             foreach (var enemyGO in _enemiesSpawner.GetArrayFromActiveObjects())
             {
-                if (!enemyGO.TryGetComponent<Enemy>(out var enemy)) continue;
+                if (!enemyGO.TryGetComponent<Ship>(out var enemy)) continue;
 
                 if (enemy.IsHealthZero)
                 {
@@ -43,7 +43,7 @@ namespace ShootEmUp
 
         public void Spawn()
         {
-            var enemy = _enemiesSpawner.SpawnComponent<Enemy>();
+            var enemy = _enemiesSpawner.SpawnComponent<Ship>();
             var isEnemyValidForFire = enemy != null && Condition(enemy.gameObject);
 
             InitEnemy(enemy, isEnemyValidForFire);
@@ -55,21 +55,20 @@ namespace ShootEmUp
                 _enemiesSpawner.GetActiveObjectsCount() < _maxCount;
         }
 
-        public void InitEnemy(Enemy enemy, bool isEnemyValidForFire) 
+        public void InitEnemy(Ship enemy, bool isEnemyValidForFire) 
         {
-            if (enemy == null) return;
-
+            if (enemy == null || !enemy.TryGetComponent<EnemyAI>(out var enemyAI)) return;
+     
             enemy.ResetHealth();
             enemy.transform.SetParent(_worldTransform);
-            enemy.SetTarget(_target);
 
             Transform spawnPosition = RandomPoint(_spawnPositions);
-            enemy.transform.position = spawnPosition.position;
+            enemy.transform.position = spawnPosition.position;  
 
             Transform attackPosition = RandomPoint(_attackPositions);
-            enemy.SetDestination(attackPosition.position);
+            enemyAI.Init(attackPosition.position, _target);          
 
-            enemy.Weapon?.SetBulletManager(_bulletManager, isEnemyValidForFire);
+            enemy.Weapon.SetBulletManager(_bulletManager, isEnemyValidForFire);
         }
 
         private Transform RandomPoint(Transform[] points)

@@ -5,24 +5,25 @@ namespace ShootEmUp
     public sealed class PlayerController : MonoBehaviour
     {
         [SerializeField]
-        private Player _character;
-
-        [SerializeField]
-        private PlayerManager _playerManager;
-
-        private void OnEnable()
+        private Ship _player;
+           
+        private void Update()
         {
-            _character.OnPlayerEnabled += _playerManager.SetManager;
-            _character.OnHealthEmpty += _ => Time.timeScale = 0;
-            _character.OnFireButtonClick += _playerManager.Shoot;
-            _character.OnMoveDirectionChanged += _playerManager.Move;
+            if (_player.IsHealthZero) return;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+                _player.Weapon.Shoot
+                (
+                    _player.Weapon.FirePoint.transform.position,
+                    _player.Weapon.FirePoint.rotation * Vector3.up * 3
+                );
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+                _player.Move(-1);
+            else if (Input.GetKey(KeyCode.RightArrow))
+                _player.Move(1);
+            else
+                _player.Move(0);
         }
-        private void OnDisable()
-        {
-            _character.OnPlayerEnabled -= _playerManager.SetManager;
-            _character.OnHealthEmpty -= _ => Time.timeScale = 0;
-            _character.OnFireButtonClick -= _playerManager.Shoot;
-            _character.OnMoveDirectionChanged -= _playerManager.Move;
-        }     
     }
 }
