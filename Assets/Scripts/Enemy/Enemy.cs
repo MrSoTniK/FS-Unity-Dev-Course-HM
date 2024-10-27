@@ -14,11 +14,18 @@ namespace ShootEmUp
         private float _currentTime;
         private bool _isPointReached;
 
+        private Unit _target;
+
         public bool IsPointReached => _isPointReached;
 
         public void Reset()
         {
             _currentTime = _countdown;
+        }
+
+        public void SetTarget(Unit unit) 
+        {
+            _target = unit;
         }
         
         public void SetDestination(Vector2 endPoint)
@@ -27,22 +34,23 @@ namespace ShootEmUp
             _isPointReached = false;
         }   
 
-        public void Attack(Unit unit, float fixedDeltaTime) 
+        public void Attack(float fixedDeltaTime) 
         {
-            if (unit.IsHealthZero) return;
+            if (_target == null || _target.IsHealthZero) return;
 
             _currentTime -= fixedDeltaTime;
             if (_currentTime > 0) return;
 
-            Vector2 startPosition = FirePoint.position;
-            Vector2 vector = (Vector2)unit.transform.position - startPosition;
+            Vector2 startPosition = Weapon.FirePoint.position;
+            Vector2 vector = (Vector2)_target.transform.position - startPosition;
             Vector2 direction = vector.normalized;
-            OnFire?.Invoke(startPosition, direction);
+
+            Weapon.Shoot(startPosition, direction);
 
             _currentTime += _countdown;
         }
 
-        public void Move(Vector3 targetPosition, float fixedDeltaTime)
+        public void Move(float fixedDeltaTime)
         {
             Vector2 vector = _destination - (Vector2)transform.position;
             if (vector.magnitude <= 0.25f)

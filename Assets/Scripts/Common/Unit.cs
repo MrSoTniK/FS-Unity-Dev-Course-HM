@@ -5,10 +5,10 @@ namespace ShootEmUp
     public class Unit : MonoBehaviour
     {
         [SerializeField]
-        private Transform _firePoint;
+        private int _maxHealth;
 
         [SerializeField]
-        private int _maxHealth;
+        private Weapon _weapon;
 
         [SerializeField]
         private Rigidbody2D _rigidbody;
@@ -21,10 +21,11 @@ namespace ShootEmUp
         public int CurrentHealth => _currentHealth;
         public bool IsHealthZero => _currentHealth <= 0;
 
-        public Transform FirePoint => _firePoint;
         public float Speed => _speed;
 
         public Rigidbody2D Rigidbody => _rigidbody;
+
+        public Weapon Weapon => _weapon;
 
         public virtual void Move(Vector3 targetPosition)
         {

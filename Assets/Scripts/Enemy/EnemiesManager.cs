@@ -5,10 +5,10 @@ namespace ShootEmUp
     public class EnemiesManager : MonoBehaviour
     {
         [SerializeField]
-        private EnemyCreator _enemyCreator;
+        private Spawner _enemiesSpawner;
 
         [SerializeField]
-        private BulletCreator _bulletCreator;
+        private BulletManager _bulletManager;
 
         [SerializeField] 
         private Unit _target;
@@ -22,28 +22,37 @@ namespace ShootEmUp
         [SerializeField]
         private Transform[] _attackPositions;   
 
+        [SerializeField]
+        private int _maxCount;
+
         private void FixedUpdate()
         {
-            foreach (var enemyGO in _enemyCreator.GetEnemiesArray())
+            foreach (var enemyGO in _enemiesSpawner.GetArrayFromActiveObjects())
             {
                 if (!enemyGO.TryGetComponent<Enemy>(out var enemy)) continue;
 
                 if (enemy.IsHealthZero)
                 {
-                    enemy.OnFire -= OnFire;
-                    continue;
-                }
+                    enemyGO.transform.SetParent(_enemiesSpawner.GetContainer());
 
-                switch (enemy.IsPointReached) 
-                {
-                    case true:
-                        enemy.Attack(_target, Time.fixedDeltaTime);
-                        break;
-                    case false:
-                        enemy.Move(_target.transform.position, Time.fixedDeltaTime);
-                        break;
-                }             
+                    _enemiesSpawner.RemoveFromActiveObjects(enemyGO);
+                    _enemiesSpawner.Enqueue(enemyGO);
+                }         
             }          
+        }
+
+        public void Spawn()
+        {
+            var enemy = _enemiesSpawner.SpawnComponent<Enemy>();
+            var isEnemyValidForFire = enemy != null && Condition(enemy.gameObject);
+
+            InitEnemy(enemy, isEnemyValidForFire);
+        }
+
+        private bool Condition(GameObject enemyGO)
+        {
+            return _enemiesSpawner.AddToActiveObjects(enemyGO) &&
+                _enemiesSpawner.GetActiveObjectsCount() < _maxCount;
         }
 
         public void InitEnemy(Enemy enemy, bool isEnemyValidForFire) 
@@ -52,6 +61,7 @@ namespace ShootEmUp
 
             enemy.ResetHealth();
             enemy.transform.SetParent(_worldTransform);
+            enemy.SetTarget(_target);
 
             Transform spawnPosition = RandomPoint(_spawnPositions);
             enemy.transform.position = spawnPosition.position;
@@ -59,13 +69,7 @@ namespace ShootEmUp
             Transform attackPosition = RandomPoint(_attackPositions);
             enemy.SetDestination(attackPosition.position);
 
-            if (isEnemyValidForFire)
-                enemy.OnFire += OnFire;
-        }
-
-        private void OnFire(Vector2 position, Vector2 direction) 
-        {
-            _bulletCreator.SpawnBullet(position, direction * 2);       
+            enemy.Weapon?.SetBulletManager(_bulletManager, isEnemyValidForFire);
         }
 
         private Transform RandomPoint(Transform[] points)

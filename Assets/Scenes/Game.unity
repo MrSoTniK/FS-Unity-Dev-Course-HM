@@ -272,14 +272,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 363245575}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3385b8752b787a48a2c3e2a93d512e4, type: 3}
+  m_Script: {fileID: 11500000, guid: e9508cbf52154664088c7c202707be14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
+  _pool: {fileID: 1831741370}
+  _prefab: {fileID: 2743036428890533592, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
   _quantity: 10
   _worldTransform: {fileID: 1290949509}
-  _bulletsPool: {fileID: 1831741370}
-  _cache: {fileID: 363245578}
 --- !u!114 &363245578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,11 +288,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 363245575}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df7f5ecc4e43c7342b91783816074d96, type: 3}
+  m_Script: {fileID: 11500000, guid: ffd19754bf12f4f4e8b7553237d69e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawner: {fileID: 363245577}
   _levelBounds: {fileID: 2572952653776768186}
-  _pool: {fileID: 1831741370}
 --- !u!1 &454927077
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,8 +440,8 @@ GameObject:
   m_Component:
   - component: {fileID: 562298204}
   - component: {fileID: 562298207}
-  - component: {fileID: 562298206}
-  - component: {fileID: 562298205}
+  - component: {fileID: 562298208}
+  - component: {fileID: 562298209}
   m_Layer: 0
   m_Name: Enemies
   m_TagString: Untagged
@@ -466,37 +465,6 @@ Transform:
   - {fileID: 178513672}
   m_Father: {fileID: 3951702117947426122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &562298205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 562298203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a78d64256f8aa5443bac2a4f3e947aa7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _prefab: {fileID: 102605417607457000, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
-  _enemiesPool: {fileID: 178513673}
-  _worldTransform: {fileID: 1683128698}
-  _quantity: 7
-  _maxCount: 5
---- !u!114 &562298206
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 562298203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33651762fafe9c34cb25b8626fe00961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyCreator: {fileID: 562298205}
-  _enemiesManager: {fileID: 562298207}
 --- !u!114 &562298207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,8 +477,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a5b78700a7cb84fa265af9f28cdeb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyCreator: {fileID: 562298205}
-  _bulletCreator: {fileID: 363245577}
+  _enemiesSpawner: {fileID: 562298208}
+  _bulletManager: {fileID: 363245578}
   _target: {fileID: 4414282821800802405}
   _worldTransform: {fileID: 1683128698}
   _spawnPositions:
@@ -532,6 +500,36 @@ MonoBehaviour:
   - {fileID: 1549378007}
   - {fileID: 78117031}
   - {fileID: 883274640}
+  _maxCount: 5
+--- !u!114 &562298208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562298203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9508cbf52154664088c7c202707be14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pool: {fileID: 178513673}
+  _prefab: {fileID: 559606060570185700, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
+  _quantity: 5
+  _worldTransform: {fileID: 1683128698}
+--- !u!114 &562298209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562298203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f7d5ea1d5ced446b39c4ed1ec3a8db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyManager: {fileID: 562298207}
 --- !u!1 &601831081
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,14 +573,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 601831081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3385b8752b787a48a2c3e2a93d512e4, type: 3}
+  m_Script: {fileID: 11500000, guid: e9508cbf52154664088c7c202707be14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 201757604187811891, guid: bb9f6030844b79a4a863848843a7154a, type: 3}
+  _pool: {fileID: 454927080}
+  _prefab: {fileID: 2743036428890533592, guid: bb9f6030844b79a4a863848843a7154a, type: 3}
   _quantity: 10
   _worldTransform: {fileID: 1290949509}
-  _bulletsPool: {fileID: 454927080}
-  _cache: {fileID: 601831084}
 --- !u!114 &601831084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,11 +589,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 601831081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df7f5ecc4e43c7342b91783816074d96, type: 3}
+  m_Script: {fileID: 11500000, guid: ffd19754bf12f4f4e8b7553237d69e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawner: {fileID: 601831083}
   _levelBounds: {fileID: 2572952653776768186}
-  _pool: {fileID: 454927080}
 --- !u!1 &883274639
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +984,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d02538256d44194aaa728128fbdf2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletCreator: {fileID: 601831083}
+  _bulletManager: {fileID: 601831084}
 --- !u!1 &1996814476
 GameObject:
   m_ObjectHideFlags: 0

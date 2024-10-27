@@ -1,14 +1,19 @@
+using System;
 using UnityEngine;
 
 namespace ShootEmUp 
 {
     public class PlayerManager : MonoBehaviour
     {
-        [SerializeField] private BulletCreator _bulletCreator;
+        [SerializeField] private BulletManager _bulletManager;
 
-        public void Shoot(Player player, Vector2 distance) 
+        public void Shoot(Player player) 
         {
-            _bulletCreator.SpawnBullet(player.FirePoint.position, distance);
+            player.Weapon.Shoot
+                (
+                    player.Weapon.FirePoint.transform.position,
+                    player.Weapon.FirePoint.rotation * Vector3.up * 3
+                );
         }
 
         public void Move(Player player, int direction) 
@@ -18,6 +23,11 @@ namespace ShootEmUp
             Vector2 targetPosition = player.Rigidbody.position + moveStep;
 
             player.Move(targetPosition);
+        }
+
+        public void SetManager(Player player)
+        {
+            player.Weapon.SetBulletManager(_bulletManager);
         }
     }
 }

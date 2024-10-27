@@ -8,8 +8,9 @@ namespace ShootEmUp
         public Action<Player, int> OnHealthChanged;
         public Action<Player> OnHealthEmpty;
 
-        public Action<Player, Vector2> OnFireButtonClick;
+        public Action<Player> OnFireButtonClick;
         public Action<Player, int> OnMoveDirectionChanged;
+        public Action<Player> OnPlayerEnabled;
 
         private int _moveDirection;
 
@@ -18,6 +19,7 @@ namespace ShootEmUp
         private void OnEnable()
         {
             ResetHealth();
+            OnPlayerEnabled?.Invoke(this);
         }
 
         public override void ReceiveDamage(int damage)
@@ -34,7 +36,7 @@ namespace ShootEmUp
             if (IsHealthZero) return;
 
             if (Input.GetKeyDown(KeyCode.Space))
-                OnFireButtonClick?.Invoke(this, FirePoint.rotation * Vector3.up * 3);
+                OnFireButtonClick?.Invoke(this);
 
             if (Input.GetKey(KeyCode.LeftArrow))
                 OnMoveDirectionChanged?.Invoke(this, -1);
