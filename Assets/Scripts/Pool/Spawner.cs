@@ -22,9 +22,9 @@ namespace ShootEmUp
         {
             TComponent component = null;
 
-            if (!_pool.TryDequeue(out var gameObject) || gameObject.TryGetComponent(out component))
+            if (!_pool.TryDequeue(out var componentGO) || !componentGO.TryGetComponent<TComponent>(out component))
             {
-                gameObject = Instantiate(_prefab, _pool.GetContainer());             
+                component = Instantiate(_prefab, _pool.GetContainer()).GetComponent<TComponent>();             
             }
 
             return component;

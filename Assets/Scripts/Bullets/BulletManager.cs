@@ -23,8 +23,8 @@ namespace ShootEmUp
             var bulletGO = _spawner.SpawnGameObject();
             if (!bulletGO.TryGetComponent<Bullet>(out var bullet)) return;
 
-            if (!_spawner.AddToActiveObjects(gameObject)) return;
-            gameObject.transform.position = position;
+            if (!_spawner.AddToActiveObjects(bulletGO)) return;
+            bulletGO.transform.position = position;
 
             bullet.OnBulletHit += RemoveBullet;
 
